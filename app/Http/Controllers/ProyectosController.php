@@ -61,8 +61,7 @@ class ProyectosController extends Controller
      */
     public function edit(Proyectos $proyectos)
     {
-        $proyecto=Proyectos::find($id);
-        return view('projects.edit',compact('proyecto'));
+         return view('projects.edit', compact('proyectos'));
     }
 
     /**
@@ -72,10 +71,16 @@ class ProyectosController extends Controller
      * @param  \App\Models\Proyectos  $proyectos
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Proyectos $proyectos)
-    {
-        //
-    }
+    public function update(Request $request, $id)
+{
+    DB::table('proyectos')
+        ->where('id', $id)
+        ->update([
+            'nombre' => $request->input('nombre'),
+            'descripcion' => $request->input('descripcion'),
+        ]);
+    return redirect()->route('proyectos.index')->with('success', 'Proyecto actualizado exitosamente.');
+}
 
     /**
      * Remove the specified resource from storage.
@@ -83,9 +88,9 @@ class ProyectosController extends Controller
      * @param  \App\Models\Proyectos  $proyectos
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Proyectos $proyectos)
-    {
-        $proyectos->delete();
-        return redirect()->route('proyectos.index')->with('success', 'Proyecto eliminado exitosamente.');
-    }
+    public function destroy($id)
+{
+    DB::table('proyectos')->where('id', $id)->delete();
+    return redirect()->route('proyectos.index')->with('success', 'Proyecto eliminado exitosamente.');
+}
 }
